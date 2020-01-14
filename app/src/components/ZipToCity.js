@@ -6,7 +6,8 @@ class ZipToCity extends Component {
     super(props)
     this.state = {
       zip: 0,
-      city: ''
+      city: '',
+      state: ''
     }
   }
 
@@ -20,7 +21,10 @@ class ZipToCity extends Component {
       .then(res => {
         const cities = res.data;
         console.log(cities[0].City)
-        this.setState({city: cities[0].City})
+        this.setState({
+          city: cities[0].City,
+          state: cities[0].State
+        })
     })
   }
 
@@ -31,7 +35,7 @@ class ZipToCity extends Component {
         <p>Please enter a Zip Code</p>
         <input type='text' onChange={this.myChangeHandler}/>
         <input type='submit' />
-        <h3>City: {this.state.city}</h3>
+        <h3>{this.state.city}, {this.state.state}</h3>
       </form>
     )
   }

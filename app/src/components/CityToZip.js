@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import Zip from './Zip';
 
 class CityToZip extends Component {
   constructor(props){
     super(props)
     this.state = {
       city: '',
-      zips: 0
+      zips: []
     }
   }
 
@@ -21,10 +22,11 @@ class CityToZip extends Component {
     axios.get(`http://ctp-zip-api.herokuapp.com/city/${inputUp}`)
       .then(res => {
         const zips = res.data;
-        console.log(zips[0]);
-        this.setState({zips: zips[0]})
+        console.log(zips);
+        this.setState({zips: zips})
     })
   }
+
 
   render(){
     return (
@@ -33,7 +35,16 @@ class CityToZip extends Component {
         <p>Please enter a City</p>
         <input type='text' onChange={this.myChangeHandler}/>
         <input type='submit' />
-        <h3>Zip Code: {this.state.zips}</h3>
+        <ul>
+          {Object.keys(this.state.zips).map(key => (
+            <Zip
+              key={key}
+              index={key}//to access key
+              //details={this.state.zips[key]}
+              code={this.state.zips[key]}
+            />
+          ))}
+        </ul>
       </form>
     )
   }
