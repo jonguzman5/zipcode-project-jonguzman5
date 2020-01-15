@@ -7,6 +7,7 @@ class CityToZip extends Component {
     super(props)
     this.state = {
       city: '',
+      state: [],
       zips: []
     }
   }
@@ -19,11 +20,22 @@ class CityToZip extends Component {
     e.preventDefault();
     const input = this.state.city;
     const inputUp = input.toUpperCase();
+    let codes = [];
     axios.get(`http://ctp-zip-api.herokuapp.com/city/${inputUp}`)
       .then(res => {
         const zips = res.data;
-        console.log(zips);
+        //console.log(zips);
+        codes = [...zips];//Object.values(zips)
         this.setState({zips: zips})
+    }).then(res => {
+      codes.map(code => {
+        axios.get(`http://ctp-zip-api.herokuapp.com/zip/${code}`)
+          .then(res => {
+            const states = res.data;
+            console.log(states[0].State);
+            this.setState({state: states[0].State})
+          })
+      })
     })
   }
 
@@ -40,8 +52,9 @@ class CityToZip extends Component {
             <Zip
               key={key}
               index={key}//to access key
-              //details={this.state.zips[key]}
               code={this.state.zips[key]}
+              //state={this.state.state[key]}
+              //details={this.state.zips[key]}
             />
           ))}
         </ul>
